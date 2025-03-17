@@ -20,7 +20,7 @@ public:
     std::vector<short > farbuffer;
 
     int Aec_Init(std::string &model_data){
-        nkf_net = std::make_shared<MNNAudioAdapter>(model_data,1);;
+        nkf_net = std::make_shared<MNNAudioAdapter>(model_data,1);
     }
 
     void Aec_process(){
