@@ -50,26 +50,26 @@ public:
 
     void Init(const std::string &input, int numcp,int frame_num) {
         sess = detect_model_->createSession(_config);
-        input_ = detect_model_->getSessionInput(sess, nullptr);
     }
 
-    void Infer(const std::vector<std::complex<float>> &input) {
+    std::vector<float> Infer() {
+        auto inputTensor = static_cast<MNN::Interpreter*>(model)->getSessionInput(session, nullptr);
+        auto farTensor = static_cast<MNN::Interpreter*>(model)->getSessionInput(session, "farEnd");
+        // 复制 nearEnd 数据到 inputTensor
+        memcpy(inputTensor->host<float>(), nearEnd.data(), nearEnd.size() * sizeof(float));
+        memcpy(farTensor->host<float>(), farEnd.data(), farEnd.size() * sizeof(float));
+
+        // 运行 AEC 计算
+        static_cast<MNN::Interpreter*>(model)->runSession(session);
+
+        // 获取去除回声后的输出
+        auto outputTensor = static_cast<MNN::Interpreter*>(model)->getSessionOutput(session, nullptr);
+        std::vector<float> processedAudio(nearEnd.size());
+        memcpy(processedAudio.data(), outputTensor->host<float>(), processedAudio.size() * sizeof(float));
+
+        return processedAudio;
         // 预处理：填充输入张量
-        auto input_data = input_->host<float>();
-        for (size_t i = 0; i < input.size(); ++i) {
-            input_data[i * 2] = input[i].real();
-            input_data[i * 2 + 1] = input[i].imag();
-        }
-    }
 
-    std::vector<std::complex<float>> get_output(){
-        // 获取输出数据
-        auto output_data = output_tensor->host<float>();
-        std::vector<std::complex<float>> output(input.size());
-        for (size_t i = 0; i < output.size(); ++i) {
-            output[i] = std::complex<float>(output_data[i * 2], output_data[i * 2 + 1]);
-        }
-        return output;
     }
 
 

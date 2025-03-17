@@ -10,6 +10,8 @@
 #include "mnn_adapter.h"
 #include <iostream>
 #include <fstream>
+#include <memory>
+
 
 class NKFProcessor{
 public:
@@ -23,7 +25,6 @@ public:
     }
 
     void Aec_process(){
-
     };
 
     std::shared_ptr<MNNAudioAdapter> nkf_net;
