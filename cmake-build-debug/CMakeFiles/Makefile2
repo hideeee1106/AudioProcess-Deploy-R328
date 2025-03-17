@@ -62,7 +62,7 @@ CMAKE_BINARY_DIR = D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/NKF_MNN_Deploy_R328.dir/all
+all: CMakeFiles/NKF-AEC-lite.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -70,34 +70,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/NKF_MNN_Deploy_R328.dir/clean
+clean: CMakeFiles/NKF-AEC-lite.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/NKF_MNN_Deploy_R328.dir
+# Target rules for target CMakeFiles/NKF-AEC-lite.dir
 
 # All Build rule for target.
-CMakeFiles/NKF_MNN_Deploy_R328.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy-R328\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target NKF_MNN_Deploy_R328"
-.PHONY : CMakeFiles/NKF_MNN_Deploy_R328.dir/all
+CMakeFiles/NKF-AEC-lite.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy-R328\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target NKF-AEC-lite"
+.PHONY : CMakeFiles/NKF-AEC-lite.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/NKF_MNN_Deploy_R328.dir/rule: cmake_check_build_system
+CMakeFiles/NKF-AEC-lite.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy-R328\cmake-build-debug\CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/NKF_MNN_Deploy_R328.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/NKF-AEC-lite.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy-R328\cmake-build-debug\CMakeFiles 0
-.PHONY : CMakeFiles/NKF_MNN_Deploy_R328.dir/rule
+.PHONY : CMakeFiles/NKF-AEC-lite.dir/rule
 
 # Convenience name for target.
-NKF_MNN_Deploy_R328: CMakeFiles/NKF_MNN_Deploy_R328.dir/rule
-.PHONY : NKF_MNN_Deploy_R328
+NKF-AEC-lite: CMakeFiles/NKF-AEC-lite.dir/rule
+.PHONY : NKF-AEC-lite
 
 # clean rule for target.
-CMakeFiles/NKF_MNN_Deploy_R328.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/clean
-.PHONY : CMakeFiles/NKF_MNN_Deploy_R328.dir/clean
+CMakeFiles/NKF-AEC-lite.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/clean
+.PHONY : CMakeFiles/NKF-AEC-lite.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

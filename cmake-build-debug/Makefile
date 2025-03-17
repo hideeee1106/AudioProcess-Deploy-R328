@@ -116,41 +116,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named NKF_MNN_Deploy_R328
+# Target rules for targets named NKF-AEC-lite
 
 # Build rule for target.
-NKF_MNN_Deploy_R328: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 NKF_MNN_Deploy_R328
-.PHONY : NKF_MNN_Deploy_R328
+NKF-AEC-lite: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 NKF-AEC-lite
+.PHONY : NKF-AEC-lite
 
 # fast build rule for target.
-NKF_MNN_Deploy_R328/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/build
-.PHONY : NKF_MNN_Deploy_R328/fast
+NKF-AEC-lite/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/build
+.PHONY : NKF-AEC-lite/fast
 
-library.obj: library.cpp.obj
-.PHONY : library.obj
+src/c_api/c_api.obj: src/c_api/c_api.cc.obj
+.PHONY : src/c_api/c_api.obj
 
 # target to build an object file
-library.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/library.cpp.obj
-.PHONY : library.cpp.obj
+src/c_api/c_api.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/src/c_api/c_api.cc.obj
+.PHONY : src/c_api/c_api.cc.obj
 
-library.i: library.cpp.i
-.PHONY : library.i
+src/c_api/c_api.i: src/c_api/c_api.cc.i
+.PHONY : src/c_api/c_api.i
 
 # target to preprocess a source file
-library.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/library.cpp.i
-.PHONY : library.cpp.i
+src/c_api/c_api.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/src/c_api/c_api.cc.i
+.PHONY : src/c_api/c_api.cc.i
 
-library.s: library.cpp.s
-.PHONY : library.s
+src/c_api/c_api.s: src/c_api/c_api.cc.s
+.PHONY : src/c_api/c_api.s
 
 # target to generate assembly for a file
-library.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF_MNN_Deploy_R328.dir\build.make CMakeFiles/NKF_MNN_Deploy_R328.dir/library.cpp.s
-.PHONY : library.cpp.s
+src/c_api/c_api.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\NKF-AEC-lite.dir\build.make CMakeFiles/NKF-AEC-lite.dir/src/c_api/c_api.cc.s
+.PHONY : src/c_api/c_api.cc.s
 
 # Help Target
 help:
@@ -160,10 +160,10 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... NKF_MNN_Deploy_R328
-	@echo ... library.obj
-	@echo ... library.i
-	@echo ... library.s
+	@echo ... NKF-AEC-lite
+	@echo ... src/c_api/c_api.obj
+	@echo ... src/c_api/c_api.i
+	@echo ... src/c_api/c_api.s
 .PHONY : help
 
 

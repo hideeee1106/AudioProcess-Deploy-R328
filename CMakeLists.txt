@@ -3,6 +3,7 @@ project(NKF_MNN_Deploy_R328)
 
 set(CMAKE_CXX_STANDARD 11)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 
 message("Build in MNN")
 
