@@ -1,3 +1,0 @@
-/home/hideeee/CLionProjects/NKF-MNN-Deploy-R328/cmake-build-debug/CMakeFiles/NKF-AEC-lite.dir
-/home/hideeee/CLionProjects/NKF-MNN-Deploy-R328/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/hideeee/CLionProjects/NKF-MNN-Deploy-R328/cmake-build-debug/CMakeFiles/rebuild_cache.dir
