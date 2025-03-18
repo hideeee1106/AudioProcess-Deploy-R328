@@ -52,7 +52,7 @@ public:
         sess = detect_model_->createSession(_config);
     }
 
-    std::vector<float> Infer() {
+    std::vector<float> Infer(const std::vector<float>& nearEnd, const std::vector<float>& farEnd) {
         auto inputTensor = static_cast<MNN::Interpreter*>(model)->getSessionInput(session, nullptr);
         auto farTensor = static_cast<MNN::Interpreter*>(model)->getSessionInput(session, "farEnd");
         // 复制 nearEnd 数据到 inputTensor
@@ -68,8 +68,6 @@ public:
         memcpy(processedAudio.data(), outputTensor->host<float>(), processedAudio.size() * sizeof(float));
 
         return processedAudio;
-        // 预处理：填充输入张量
-
     }
 
 

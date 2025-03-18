@@ -7,11 +7,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 
 message("Build in MNN")
 
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
+
 # mnn infer
 set(MNN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/MNN/linux/include)
 set(MNN_lIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/MNN/linux/lib)
 include_directories(${MNN_DIR})
 link_directories(${MNN_lIB_DIR})
+message("MNN Path:${MNN_lIB_DIR}")
+
 # MNN Libraries
 set(MNN_LIBRARIES MNN)
 
@@ -24,4 +29,4 @@ set(COMPILE_FILES  ${C_API_FILES})
 # Build shared library
 set(LIB_NAME NKF-AEC-lite)
 add_library(${LIB_NAME} SHARED ${COMPILE_FILES})
-target_link_libraries(${LIB_NAME}  ${MNN_LIBRARIES})
+target_link_libraries(${LIB_NAME} ${MNN_LIBRARIES})

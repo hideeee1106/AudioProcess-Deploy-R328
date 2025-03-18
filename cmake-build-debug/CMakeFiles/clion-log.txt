@@ -1,5 +1,0 @@
-"D:\software\clion\CLion 2022.1.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "MinGW Makefiles" -S D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy-R328 -B D:\python_project\project\Microphone_Array\AEC\NKF-MNN-Deploy-R328\cmake-build-debug
-Build in MNN
--- Configuring done
--- Generating done
--- Build files have been written to: D:/python_project/project/Microphone_Array/AEC/NKF-MNN-Deploy-R328/cmake-build-debug

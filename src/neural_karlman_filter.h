@@ -19,12 +19,15 @@ public:
     ~NKFProcessor(){};
     std::vector<short > nearbuffer;
     std::vector<short > farbuffer;
+    int datalens = 512;
+
 
     int Aec_Init(std::string &model_data){
         nkf_net = std::make_shared<MNNAudioAdapter>(model_data,1);
     }
 
-    void Aec_process(){
+    void Aec_process(const std::vector<float>& nearEnd, const std::vector<float>& farEnd){
+        nkf_net->Infer(nearEnd,farEnd);
     };
 
     std::shared_ptr<MNNAudioAdapter> nkf_net;
