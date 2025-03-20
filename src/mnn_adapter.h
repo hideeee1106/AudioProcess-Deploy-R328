@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "../model_loader/model_loader.h"
 
 class MNNAudioAdapter {
 public:
@@ -53,17 +54,17 @@ public:
     }
 
     std::vector<float> Infer(const std::vector<float>& nearEnd, const std::vector<float>& farEnd) {
-        auto inputTensor = static_cast<MNN::Interpreter*>(model)->getSessionInput(session, nullptr);
-        auto farTensor = static_cast<MNN::Interpreter*>(model)->getSessionInput(session, "farEnd");
+        auto inputTensor =detect_model_->getSessionInput(sess, nullptr);
+        auto farTensor = detect_model_->getSessionInput(sess, "farEnd");
         // 复制 nearEnd 数据到 inputTensor
         memcpy(inputTensor->host<float>(), nearEnd.data(), nearEnd.size() * sizeof(float));
         memcpy(farTensor->host<float>(), farEnd.data(), farEnd.size() * sizeof(float));
 
         // 运行 AEC 计算
-        static_cast<MNN::Interpreter*>(model)->runSession(session);
+        detect_model_->runSession(sess);
 
         // 获取去除回声后的输出
-        auto outputTensor = static_cast<MNN::Interpreter*>(model)->getSessionOutput(session, nullptr);
+        auto outputTensor = detect_model_->getSessionOutput(sess, nullptr);
         std::vector<float> processedAudio(nearEnd.size());
         memcpy(processedAudio.data(), outputTensor->host<float>(), processedAudio.size() * sizeof(float));
 
