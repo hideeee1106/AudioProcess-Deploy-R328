@@ -64,8 +64,8 @@ public:
         memmove(m_pEngine.lpb_buffer, m_pEngine.lpb_buffer + BLOCK_SHIFT, (BLOCK_LEN - BLOCK_SHIFT) * sizeof(float));
 
         for(int n=0;n<BLOCK_SHIFT;n++){
-            m_pEngine.mic_buffer[n+BLOCK_LEN-BLOCK_SHIFT]=micdata[n+BLOCK_SHIFT];
-            m_pEngine.lpb_buffer[n+BLOCK_LEN-BLOCK_SHIFT]=refdata[n+BLOCK_SHIFT];
+            m_pEngine.mic_buffer[n+BLOCK_LEN-BLOCK_SHIFT]=micdata[n];
+            m_pEngine.lpb_buffer[n+BLOCK_LEN-BLOCK_SHIFT]=refdata[n];
         }
 
         AEC_Infer();

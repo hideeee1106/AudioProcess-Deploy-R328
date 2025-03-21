@@ -26,12 +26,12 @@ extern "C"
     // Snore Audio Predictor - 鼾声音频检测器
     typedef struct  SL_EchoCancelFilter SL_EchoCancelFilter;
 
-//    SL_CAPI_EXPORT extern int
-SL_CAPI_EXPORT extern void SL_CreateEchoCancelFilter(SL_EchoCancelFilter *predictor);
+    //    SL_CAPI_EXPORT extern int
+    SL_CAPI_EXPORT extern SL_EchoCancelFilter * SL_CreateEchoCancelFilter(const char *model_path);
 
-SL_CAPI_EXPORT extern void SL_ReleaseEchoCancelFilter(SL_EchoCancelFilter *predictor);
+    SL_CAPI_EXPORT extern void SL_ReleaseEchoCancelFilter(SL_EchoCancelFilter *predictor);
 
-SL_CAPI_EXPORT extern void SL_EchoCancelFilterForWav1C16khz(SL_EchoCancelFilter *predictor);
+    SL_CAPI_EXPORT extern void SL_EchoCancelFilterForWav1C16khz(SL_EchoCancelFilter *predictor,float *mic,float *ref,float * res);
 
 
 
