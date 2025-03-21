@@ -24,7 +24,7 @@ void ExportWAV(
     File.setNumSamplesPerChannel((int)BufSz);
     File.setNumChannels(1);
     File.setBitDepth(16);
-    File.setSampleRate(16000);
+    File.setSampleRate(8000);
     File.save(Filename, AudioFileFormat::Wave);
 }
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
             outputdata.push_back(output);    //for one forward process save first BLOCK_SHIFT model output samples
         }
     }
-    ExportWAV(out_audio,outputdata,16000);
+    ExportWAV(out_audio,outputdata,8000);
 
 
 

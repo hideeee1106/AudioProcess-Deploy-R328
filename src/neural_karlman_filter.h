@@ -218,6 +218,11 @@ public:
         pocketfft::c2r(shape, strideo, stridel, axes, pocketfft::BACKWARD, mic_res.data(), mic_in, 1.0);
 
 
+        for (int i = 0; i < BLOCK_LEN; i++){
+            estimated_block[i] = mic_in[i];
+        }
+
+
         memmove(m_pEngine.out_buffer, m_pEngine.out_buffer + BLOCK_SHIFT,
                 (BLOCK_LEN - BLOCK_SHIFT) * sizeof(float));
         memset(m_pEngine.out_buffer + (BLOCK_LEN - BLOCK_SHIFT),
