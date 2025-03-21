@@ -13,6 +13,8 @@
 #include <memory>
 #include <complex.h>
 #include "../log.h"
+#include "pocketfft_hdronly.h"
+
 
 using namespace std;
 
@@ -46,8 +48,6 @@ public:
     std::vector<float > nearbuffer;
     std::vector<float > farbuffer;
     std::vector<float > outputbuffer;
-    int datalens = 512;
-
 
     int Aec_Init(std::string &model_data){
         nkf_net = std::make_shared<MNNAudioAdapter>(model_data,1);
@@ -57,8 +57,11 @@ public:
         ResetInout();
     }
 
+    int enhance(){
 
-    void Aec_prepare(){
+    }
+
+    void AEC_Infer(){
 
         float estimated_block[BLOCK_LEN]={0};
         float mic_real[FFT_OUT_SIZE]={0};
@@ -104,8 +107,8 @@ public:
         memcpy(m_pEngine.h_prior_real,m_pEngine.h_posterior_real,NKF_LEN*FFT_OUT_SIZE*sizeof(double));
         memcpy(m_pEngine.h_prior_imag,m_pEngine.h_posterior_imag,NKF_LEN*FFT_OUT_SIZE*sizeof(double));
 
-        float input_feature_real[(2*NKF_LEN+1)*FFT_OUT_SIZE]={0};
-        float input_feature_imag[(2*NKF_LEN+1)*FFT_OUT_SIZE]={0};
+        vector<float> input_feature_real((2*NKF_LEN+1)*FFT_OUT_SIZE);
+        vector<float> input_feature_imag((2*NKF_LEN+1)*FFT_OUT_SIZE);
         double e_real[FFT_OUT_SIZE]={0};
         double e_imag[FFT_OUT_SIZE]={0};
 
@@ -129,13 +132,79 @@ public:
             input_feature_imag[k*i+NKF_LEN]=static_cast<float>(e_imag[i]);
 
         }
+        
+        nkf_net->Infer(input_feature_real,input_feature_imag,m_pEngine.instates);
+        
+        auto enh_real = nkf_net->getOutput("enh_real");
+        auto enh_imag = nkf_net->getOutput("enh_imag");
+        auto out_hrr =nkf_net->getOutput( "out_hrr");
+        auto out_hir = nkf_net->getOutput( "out_hir");
+        auto out_hri =nkf_net->getOutput( "out_hri");
+        auto out_hii = nkf_net->getOutput( "out_hii");
+
+        auto enh_real_host_tensor = new MNN::Tensor(enh_real, enh_real->getDimensionType());
+        enh_real->copyToHostTensor(enh_real_host_tensor);
+        auto *kgreal = enh_real_host_tensor->host<float>();
+        
+        auto enh_imag_host_tensor = new MNN::Tensor(enh_imag, enh_imag->getDimensionType());
+        enh_imag->copyToHostTensor(enh_imag_host_tensor);
+        auto *kgimag = enh_imag_host_tensor->host<float>();
+        
+        
+        
+        auto out_hrr_host_tensor = new MNN::Tensor(out_hrr, out_hrr->getDimensionType());
+        out_hrr->copyToHostTensor(out_hrr_host_tensor);
+        auto *hrr_out_state = out_hrr_host_tensor->host<float>();
+        memcpy(m_pEngine.instates[0].data(), hrr_out_state, FFT_OUT_SIZE*18 * sizeof(float));
+
+        auto out_hir_host_tensor = new MNN::Tensor(out_hir, out_hir->getDimensionType());
+        out_hir->copyToHostTensor(out_hir_host_tensor);
+        auto *hir_out_state = out_hir_host_tensor->host<float>();
+        memcpy(m_pEngine.instates[1].data(), hir_out_state, FFT_OUT_SIZE*18 * sizeof(float));
+
+        auto out_hri_host_tensor = new MNN::Tensor(out_hri, out_hri->getDimensionType());
+        out_hri->copyToHostTensor(out_hri_host_tensor);
+        auto *hri_out_state = out_hri_host_tensor->host<float>();
+        memcpy(m_pEngine.instates[2].data(), hri_out_state, FFT_OUT_SIZE*18 * sizeof(float));
+
+        auto out_hii_host_tensor = new MNN::Tensor(out_hii, out_hii->getDimensionType());
+        out_hii->copyToHostTensor(out_hii_host_tensor);
+        auto *hii_out_state = out_hii_host_tensor->host<float>();
+        memcpy(m_pEngine.instates[3].data(), hii_out_state, FFT_OUT_SIZE*18 * sizeof(float));
+
+        for (int i=0;i<FFT_OUT_SIZE;i++){
+            for (int j=0;j<NKF_LEN;j++){
+                m_pEngine.h_posterior_real[NKF_LEN*i+j] =m_pEngine.h_prior_real[NKF_LEN*i+j] +e_real[i]*kgreal[NKF_LEN*i+j]-e_imag[i]*kgimag[NKF_LEN*i+j];
+                m_pEngine.h_posterior_imag[NKF_LEN*i+j] =m_pEngine.h_prior_imag[NKF_LEN*i+j] +e_imag[i]*kgreal[NKF_LEN*i+j]+e_real[i]*kgimag[NKF_LEN*i+j];
+
+            }
+        }
+
+        double echohat_real[FFT_OUT_SIZE]={0};
+        double echohat_imag[FFT_OUT_SIZE]={0};
+
+        for (int i=0;i<FFT_OUT_SIZE;i++){
+            for (int j=0;j<NKF_LEN;j++){
+                echohat_real[i] +=m_pEngine.lpb_real[j*FFT_OUT_SIZE+i]*m_pEngine.h_posterior_real[NKF_LEN*i+j] -m_pEngine.lpb_imag[j*FFT_OUT_SIZE+i]*m_pEngine.h_posterior_imag[NKF_LEN*i+j];
+                echohat_imag[i] +=m_pEngine.lpb_real[j*FFT_OUT_SIZE+i]*m_pEngine.h_posterior_imag[NKF_LEN*i+j] +m_pEngine.lpb_imag[j*FFT_OUT_SIZE+i]*m_pEngine.h_posterior_real[NKF_LEN*i+j];
+
+            }
+            mic_res[i] = cpx_type(mic_real[i]-echohat_real[i],mic_imag[i]-echohat_imag[i]);
+        }
+
+        pocketfft::c2r(shape, strideo, stridel, axes, pocketfft::BACKWARD, mic_res.data(), mic_in, 1.0);
+
+
+        memmove(m_pEngine.out_buffer, m_pEngine.out_buffer + BLOCK_SHIFT,
+                (BLOCK_LEN - BLOCK_SHIFT) * sizeof(float));
+        memset(m_pEngine.out_buffer + (BLOCK_LEN - BLOCK_SHIFT),
+               0, BLOCK_SHIFT * sizeof(float));
+        for (int i = 0; i < BLOCK_LEN; i++){
+            m_pEngine.out_buffer[i] += estimated_block[i]*hanning_windows[i];
+        }
+
 
     }
-
-
-    void Aec_process(const std::vector<cpx_type>& nearEnd, const std::vector<cpx_type>& farEnd){
-        nkf_net->Infer(nearEnd,farEnd);
-    };
 
     std::shared_ptr<MNNAudioAdapter> nkf_net;
 

@@ -53,22 +53,32 @@ public:
         sess = detect_model_->createSession(_config);
     }
 
-    std::vector<float> Infer(const std::vector<float>& nearEnd, const std::vector<float>& farEnd) {
-        auto inputTensor =detect_model_->getSessionInput(sess, nullptr);
-        auto farTensor = detect_model_->getSessionInput(sess, "farEnd");
+    void Infer(const std::vector<float>& input_real, const std::vector<float>& input_imag,const  std::vector<std::vector<float>>& inputs) {
+        auto in_real =detect_model_->getSessionInput(sess, "in_real");
+        auto in_imag = detect_model_->getSessionInput(sess, "in_imag");
+        auto in_hrr =detect_model_->getSessionInput(sess, "in_hrr");
+        auto in_hir = detect_model_->getSessionInput(sess, "in_hir");
+        auto in_hri =detect_model_->getSessionInput(sess, "in_hri");
+        auto in_hii = detect_model_->getSessionInput(sess, "in_hii");
+
         // 复制 nearEnd 数据到 inputTensor
-        memcpy(inputTensor->host<float>(), nearEnd.data(), nearEnd.size() * sizeof(float));
-        memcpy(farTensor->host<float>(), farEnd.data(), farEnd.size() * sizeof(float));
+        memcpy(in_real->host<float>(), input_real.data(), input_real.size() * sizeof(float));
+        memcpy(in_imag->host<float>(), input_imag.data(), input_imag.size() * sizeof(float));
+
+        memcpy(in_hrr->host<float>(), inputs[0].data(), inputs[0].size() * sizeof(float));
+        memcpy(in_hir->host<float>(), inputs[1].data(), inputs[1].size() * sizeof(float));
+        memcpy(in_hri->host<float>(), inputs[2].data(), inputs[2].size() * sizeof(float));
+        memcpy(in_hii->host<float>(), inputs[3].data(), inputs[3].size() * sizeof(float));
+
 
         // 运行 AEC 计算
         detect_model_->runSession(sess);
+    }
 
+    MNN::Tensor *  getOutput(const std::string& outputname){
         // 获取去除回声后的输出
-        auto outputTensor = detect_model_->getSessionOutput(sess, nullptr);
-        std::vector<float> processedAudio(nearEnd.size());
-        memcpy(processedAudio.data(), outputTensor->host<float>(), processedAudio.size() * sizeof(float));
-
-        return processedAudio;
+        auto outputTensor = detect_model_->getSessionOutput(sess, outputname.c_str());
+        return outputTensor;
     }
 
 
