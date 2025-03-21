@@ -14,6 +14,8 @@
 #include <complex.h>
 #include "../log.h"
 #include "pocketfft_hdronly.h"
+#include "cmath"
+
 
 
 using namespace std;
@@ -45,21 +47,42 @@ class NKFProcessor{
 public:
     NKFProcessor(){};
     ~NKFProcessor(){};
-    std::vector<float > nearbuffer;
-    std::vector<float > farbuffer;
+
     std::vector<float > outputbuffer;
 
-    int Aec_Init(std::string &model_data){
-        nkf_net = std::make_shared<MNNAudioAdapter>(model_data,1);
+    void Aec_Init(const char *modelPath){
+        nkf_net = std::make_shared<MNNAudioAdapter>(modelPath,1);
+        nkf_net->Init();
         for (int i=0;i<BLOCK_LEN;i++){
-            hanning_windows[i]=sinf(PI*i/(BLOCK_LEN-1));
+            hanning_windows[i]=sinf(M_PI*i/(BLOCK_LEN-1));
         }
         ResetInout();
     }
 
-    int enhance(){
+    void enhance(const float * micdata,const float * refdata){
+        memmove(m_pEngine.mic_buffer, m_pEngine.mic_buffer + BLOCK_SHIFT, (BLOCK_LEN - BLOCK_SHIFT) * sizeof(float));
+        memmove(m_pEngine.lpb_buffer, m_pEngine.lpb_buffer + BLOCK_SHIFT, (BLOCK_LEN - BLOCK_SHIFT) * sizeof(float));
 
+        for(int n=0;n<BLOCK_SHIFT;n++){
+            m_pEngine.mic_buffer[n+BLOCK_LEN-BLOCK_SHIFT]=micdata[n+BLOCK_SHIFT];
+            m_pEngine.lpb_buffer[n+BLOCK_LEN-BLOCK_SHIFT]=refdata[n+BLOCK_SHIFT];
+        }
+
+        AEC_Infer();
+
+        for(int j=0;j<BLOCK_SHIFT;j++){
+            outputbuffer.push_back(m_pEngine.out_buffer[j]);    //for one forward process save first BLOCK_SHIFT model output samples
+        }
     }
+
+    void reset(){
+        outputbuffer.clear();
+    }
+
+    float * getoutput(){
+        return  outputbuffer.data();
+    }
+
 
     void AEC_Infer(){
 
@@ -205,6 +228,7 @@ public:
 
 
     }
+
 
     std::shared_ptr<MNNAudioAdapter> nkf_net;
 

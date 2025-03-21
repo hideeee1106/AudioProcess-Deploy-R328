@@ -27,7 +27,11 @@ extern "C"
     typedef struct  SL_EchoCancelFilter SL_EchoCancelFilter;
 
 //    SL_CAPI_EXPORT extern int
+SL_CAPI_EXPORT extern void SL_CreateEchoCancelFilter(SL_EchoCancelFilter *predictor);
 
+SL_CAPI_EXPORT extern void SL_ReleaseEchoCancelFilter(SL_EchoCancelFilter *predictor);
+
+SL_CAPI_EXPORT extern void SL_EchoCancelFilterForWav1C16khz(SL_EchoCancelFilter *predictor);
 
 
 

@@ -49,7 +49,7 @@ public:
         detect_model_->releaseSession(sess);
     }
 
-    void Init(const std::string &input, int numcp,int frame_num) {
+    void Init() {
         sess = detect_model_->createSession(_config);
     }
 
