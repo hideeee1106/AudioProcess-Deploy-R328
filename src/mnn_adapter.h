@@ -50,7 +50,10 @@ public:
     }
 
     void Init() {
+        MNN_PRINT("Creating MNN session...\n");
         sess = detect_model_->createSession(_config);
+        MNN_PRINT("Session created!\n");
+
     }
 
     void Infer(const std::vector<float>& input_real, const std::vector<float>& input_imag,const  std::vector<std::vector<float>>& inputs) {
