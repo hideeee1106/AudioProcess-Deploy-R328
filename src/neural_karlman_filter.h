@@ -21,9 +21,9 @@
 using namespace std;
 
 #define SAMEPLERATE  (16000)  // 采样率 16 kHz
-#define BLOCK_LEN    (512)    // 处理块长度，每次处理 512 个采样点
+#define BLOCK_LEN    (1024)    // 处理块长度，每次处理 1024 个采样点
 #define BLOCK_SHIFT  (256)    // 块移位，每次移动 256 采样点（50% 重叠）
-#define FFT_OUT_SIZE (257)    // STFT 变换后单边频谱大小
+#define FFT_OUT_SIZE (513)    // STFT 变换后单边频谱大小
 #define NKF_LEN (4)          // NKF 滤波器的 tap 数
 typedef complex<double> cpx_type;  // 复数数据类型
 
@@ -54,7 +54,7 @@ public:
         nkf_net = std::make_shared<MNNAudioAdapter>(modelPath,1);
         nkf_net->Init();
         for (int i=0;i<BLOCK_LEN;i++){
-            hanning_windows[i]=sinf(M_PI*i/(BLOCK_LEN-1));
+            hanning_windows[i]=sinf(M_PI*i/(BLOCK_LEN-1))*sinf(M_PI*i/(BLOCK_LEN-1));
         }
         ResetInout();
     }
