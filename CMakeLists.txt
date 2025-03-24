@@ -28,6 +28,7 @@ set(COMPILE_FILES  ${C_API_FILES})
 set(LIB_NAME NKF-AEC-lite)
 add_library(${LIB_NAME} SHARED ${COMPILE_FILES})
 target_link_libraries(${LIB_NAME} ${MNN_LIBRARIES})
+message("build KARLMAN AEC with MNN on R328 ")
 
 #build target
 add_executable(TestNkfAecSample sample/test_nkf_aec.cpp ${COMPILE_FILES})

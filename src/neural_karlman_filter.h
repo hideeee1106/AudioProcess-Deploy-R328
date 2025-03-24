@@ -86,7 +86,7 @@ public:
 
     void AEC_Infer(){
 
-        float estimated_block[BLOCK_LEN]={0};
+        double estimated_block[BLOCK_LEN]={0};
         float mic_real[FFT_OUT_SIZE]={0};
         float mic_imag[FFT_OUT_SIZE]={0};
 
@@ -214,12 +214,12 @@ public:
             }
             mic_res[i] = cpx_type(mic_real[i]-echohat_real[i],mic_imag[i]-echohat_imag[i]);
         }
+        double mic_out[BLOCK_LEN]={0};
 
-        pocketfft::c2r(shape, strideo, stridel, axes, pocketfft::BACKWARD, mic_res.data(), mic_in, 1.0);
-
+        pocketfft::c2r(shape, strideo, stridel, axes, false, mic_res.data(), mic_out, 1.0);
 
         for (int i = 0; i < BLOCK_LEN; i++){
-            estimated_block[i] = mic_in[i];
+            estimated_block[i] = (mic_out[i])/1024.0;
         }
 
 
