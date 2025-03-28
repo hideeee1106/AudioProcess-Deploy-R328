@@ -21,15 +21,18 @@ set(MNN_LIBRARIES MNN)
 # C_API comple files
 set(C_API_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/c_api/c_api.cc)
 
+# NS compile files
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/ns/ NS_SRC_FILES)
 # Set compile files
-set(COMPILE_FILES  ${C_API_FILES})
+set(COMPILE_FILES  ${C_API_FILES} ${NS_SRC_FILES})
+
 
 # Build shared library
-set(LIB_NAME NKF-AEC-lite)
+set(LIB_NAME AudioProcess-lite)
 add_library(${LIB_NAME} SHARED ${COMPILE_FILES})
 target_link_libraries(${LIB_NAME} ${MNN_LIBRARIES})
 message("build KARLMAN AEC with MNN on R328 ")
 
-#build target
-add_executable(TestNkfAecSample sample/test_nkf_aec.cpp ${COMPILE_FILES})
-target_link_libraries(TestNkfAecSample ${MNN_LIBRARIES})
+##build target
+#add_executable(TestNkfAecSample sample/test_nkf_aec.cpp ${COMPILE_FILES})
+#target_link_libraries(TestNkfAecSample ${MNN_LIBRARIES})
