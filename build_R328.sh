@@ -12,7 +12,6 @@ fi
 cd ${BUILD_DIR}
 cmake .. \
     -DCMAKE_BUILD_TYPE=Release \
-    -DENABLE_RKNN2=OFF \
     -DENABLE_MNN=ON\
     -DENABLE_TIME_MONITOR=OFF \
 #    -DCMAKE_C_COMPILER=${GCC_COMPILER}-gcc \
